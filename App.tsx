@@ -13,8 +13,10 @@ import {
   Dimensions,
   StatusBar,
   Switch,
+  ImageBackground,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { BlurView } from 'expo-blur'; // Import BlurView from expo-blur
 
 const { width, height } = Dimensions.get('window');
 
@@ -177,34 +179,36 @@ const AI_TUTOR_APP = () => {
   // Colors for light and dark modes
   const colors = {
     light: {
-      background: '#f5f7fa',
+      background: 'rgba(245, 247, 250, 0.92)',
       primary: '#4776E6',
       secondary: '#8E54E9',
       text: '#333333',
       subtitleText: '#666666',
-      inputBackground: '#FFFFFF',
+      inputBackground: 'rgba(255, 255, 255, 0.95)',
       inputText: '#333333',
-      answerBackground: '#FFFFFF',
+      answerBackground: 'rgba(255, 255, 255, 0.95)',
       answerText: '#333333',
       sendButtonBg: '#4776E6',
       clearButtonBg: '#ff6b6b',
       headerBackground: '#4776E6',
-      errorText: '#e53935'
+      errorText: '#e53935',
+      backgroundOverlay: 'rgba(255, 255, 255, 0.65)'
     },
     dark: {
-      background: '#121212',
+      background: 'rgba(18, 18, 18, 0.88)',
       primary: '#3D5AFE',
       secondary: '#243B55',
       text: '#FFFFFF',
       subtitleText: '#BBBBBB',
-      inputBackground: '#2A2A2A',
+      inputBackground: 'rgba(42, 42, 42, 0.95)',
       inputText: '#FFFFFF',
-      answerBackground: '#1E1E1E',
+      answerBackground: 'rgba(30, 30, 30, 0.95)',
       answerText: '#FFFFFF',
       sendButtonBg: '#3D5AFE',
       clearButtonBg: '#B71C1C',
       headerBackground: '#141E30',
-      errorText: '#ff6e6e'
+      errorText: '#ff6e6e',
+      backgroundOverlay: 'rgba(0, 0, 0, 0.65)'
     }
   };
 
@@ -229,179 +233,215 @@ const AI_TUTOR_APP = () => {
     
     return (
       <View style={styles.serverStatusContainer}>
-        <View style={styles.statusRow}>
-          <View style={[styles.statusIndicator, { backgroundColor: statusColor }]} />
-          <Text style={[styles.statusText, { color: currentColors.subtitleText }]}>
-            {statusText}
-          </Text>
+        {/* Replace backdropFilter with BlurView */}
+        <BlurView
+          intensity={5}
+          tint={isDarkMode ? "dark" : "light"}
+          style={StyleSheet.absoluteFill}
+        />
+        <View style={styles.blurViewContent}>
+          <View style={styles.statusRow}>
+            <View style={[styles.statusIndicator, { backgroundColor: statusColor }]} />
+            <Text style={[styles.statusText, { color: currentColors.subtitleText }]}>
+              {statusText}
+            </Text>
+          </View>
+          
+          {serverStatus === 'error' && (
+            <TouchableOpacity 
+              style={[styles.retryButton, { backgroundColor: currentColors.sendButtonBg }]} 
+              onPress={handleRetryConnection}
+            >
+              <Text style={styles.retryButtonText}>Retry Connection</Text>
+            </TouchableOpacity>
+          )}
         </View>
-        
-        {serverStatus === 'error' && (
-          <TouchableOpacity 
-            style={[styles.retryButton, { backgroundColor: currentColors.sendButtonBg }]} 
-            onPress={handleRetryConnection}
-          >
-            <Text style={styles.retryButtonText}>Retry Connection</Text>
-          </TouchableOpacity>
-        )}
       </View>
     );
   };
 
+  const backgroundImage = 'https://static.vecteezy.com/system/resources/previews/008/506/639/non_2x/hand-drawn-physic-formulas-science-knowledge-education-chem-formula-and-physics-math-formula-and-physics-white-background-hand-drawn-line-math-formula-and-physics-formula-png.png';
+
   return (
-    <View style={[styles.container, { 
-      backgroundColor: currentColors.background 
-    }]}>
-      <StatusBar 
-        barStyle={isDarkMode ? "light-content" : "dark-content"} 
-        backgroundColor={currentColors.headerBackground}
-      />
-      
-      {/* Header */}
-      <View style={[styles.header, { backgroundColor: currentColors.headerBackground }]}>
-        <View style={styles.headerContent}>
-          <View>
-            <Text style={styles.title}>Math & Science AI Tutor</Text>
-            <Text style={styles.subtitle}>Your personal education assistant</Text>
-          </View>
-          
-          {/* Theme Toggle */}
-          <View style={styles.themeToggleContainer}>
-            <MaterialIcons name={isDarkMode ? "nightlight-round" : "wb-sunny"} size={24} color="#FFFFFF" />
-            <Switch 
-              value={isDarkMode}
-              onValueChange={toggleTheme}
-              trackColor={{ false: "#767577", true: "#81b0ff" }}
-              thumbColor={isDarkMode ? "#f5dd4b" : "#f4f3f4"}
-              style={styles.themeSwitch}
-            />
+    <ImageBackground 
+      source={{ uri: backgroundImage }} 
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <View style={[styles.overlay, { backgroundColor: currentColors.backgroundOverlay }]} />
+      <View style={[styles.container]}>
+        <StatusBar 
+          barStyle={isDarkMode ? "light-content" : "dark-content"} 
+          backgroundColor={currentColors.headerBackground}
+        />
+        
+        {/* Header */}
+        <View style={[styles.header, { backgroundColor: currentColors.headerBackground }]}>
+          <View style={styles.headerContent}>
+            <View>
+              <Text style={styles.title}>Math & Science AI Tutor</Text>
+              <Text style={styles.subtitle}>Your personal education assistant</Text>
+            </View>
+            
+            {/* Theme Toggle */}
+            <View style={styles.themeToggleContainer}>
+              <MaterialIcons name={isDarkMode ? "nightlight-round" : "wb-sunny"} size={24} color="#FFFFFF" />
+              <Switch 
+                value={isDarkMode}
+                onValueChange={toggleTheme}
+                trackColor={{ false: "#767577", true: "#81b0ff" }}
+                thumbColor={isDarkMode ? "#f5dd4b" : "#f4f3f4"}
+                style={styles.themeSwitch}
+              />
+            </View>
           </View>
         </View>
-      </View>
 
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.mainContent}
-      >
-        <ScrollView 
-          contentContainerStyle={styles.scrollContent}
-          keyboardShouldPersistTaps="handled"
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.mainContent}
         >
-          {/* Server Status */}
-          {renderServerStatus()}
-          
-          {/* Input Container */}
-          <View style={styles.questionSection}>
-            <Text style={[styles.sectionTitle, { 
-              color: currentColors.text
-            }]}>
-              Ask Your Question
-            </Text>
+          <ScrollView 
+            contentContainerStyle={styles.scrollContent}
+            keyboardShouldPersistTaps="handled"
+          >
+            {/* Server Status */}
+            {renderServerStatus()}
             
-            <View style={[
-              styles.inputContainer,
-              { backgroundColor: currentColors.inputBackground },
-              isFocused && [styles.inputContainerFocused, { borderColor: currentColors.primary }]
-            ]}>
-              <TextInput
-                style={[
-                  styles.input,
-                  { color: currentColors.inputText }
-                ]}
-                placeholder="Enter a math or science question..."
-                placeholderTextColor="#a0a0a0"
-                value={question}
-                onChangeText={setQuestion}
-                multiline
-                numberOfLines={4}
-                maxLength={200}
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
-              />
+            {/* Input Container */}
+            <View style={styles.questionSection}>
+              <Text style={[styles.sectionTitle, { 
+                color: currentColors.text
+              }]}>
+                Ask Your Question
+              </Text>
               
-              {question.length > 0 && (
-                <TouchableOpacity 
-                  style={styles.clearInputButton}
-                  onPress={clearInput}
-                >
-                  <MaterialIcons name="close" size={20} color="#888" />
-                </TouchableOpacity>
+              <View style={[
+                styles.inputContainer,
+                { backgroundColor: currentColors.inputBackground },
+                isFocused && [styles.inputContainerFocused, { borderColor: currentColors.primary }]
+              ]}>
+                <TextInput
+                  style={[
+                    styles.input,
+                    { color: currentColors.inputText }
+                  ]}
+                  placeholder="Enter a math or science question..."
+                  placeholderTextColor="#a0a0a0"
+                  value={question}
+                  onChangeText={setQuestion}
+                  multiline
+                  numberOfLines={4}
+                  maxLength={200}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setIsFocused(false)}
+                />
+                
+                {question.length > 0 && (
+                  <TouchableOpacity 
+                    style={styles.clearInputButton}
+                    onPress={clearInput}
+                  >
+                    <MaterialIcons name="close" size={20} color="#888" />
+                  </TouchableOpacity>
+                )}
+              </View>
+              
+              <TouchableOpacity 
+                style={[
+                  styles.submitButton,
+                  { backgroundColor: currentColors.sendButtonBg },
+                  (!question.trim() || loading) && styles.disabledButton
+                ]}
+                onPress={handleSubmit}
+                disabled={!question.trim() || loading}
+              >
+                {loading ? (
+                  <ActivityIndicator color="#FFFFFF" size="small" />
+                ) : (
+                  <View style={styles.submitButtonContent}>
+                    <Text style={styles.submitButtonText}>
+                      Get Answer
+                    </Text>
+                    <MaterialIcons name="send" size={20} color="#FFFFFF" style={styles.sendIcon} />
+                  </View>
+                )}
+              </TouchableOpacity>
+            </View>
+            
+            {/* Answer Container */}
+            <View style={styles.answerSection}>
+              <Text style={[styles.sectionTitle, { 
+                color: currentColors.text
+              }]}>
+                AI Tutor Response
+              </Text>
+              
+              <View style={[
+                styles.answerContainer,
+                { backgroundColor: currentColors.answerBackground }
+              ]}>
+                {answer ? (
+                  <ScrollView 
+                    style={styles.answerScrollView}
+                    showsVerticalScrollIndicator={true}
+                    persistentScrollbar={true}
+                    contentContainerStyle={styles.answerScrollContent}
+                  >
+                    <Text style={[
+                      styles.answerText, 
+                      { color: currentColors.answerText }
+                    ]}>
+                      {answer}
+                    </Text>
+                  </ScrollView>
+                ) : (
+                  <View style={styles.emptyAnswer}>
+                    <Text style={[styles.emptyAnswerText, { 
+                      color: currentColors.subtitleText
+                    }]}>
+                      Ask a question and I'll help you understand math and science concepts!
+                    </Text>
+                  </View>
+                )}
+              </View>
+              {answer && (
+                <View style={styles.scrollHintContainer}>
+                  <MaterialIcons name="swap-vert" size={16} color={currentColors.subtitleText} />
+                  <Text style={[styles.scrollHintText, { color: currentColors.subtitleText }]}>
+                    Scroll to see more
+                  </Text>
+                </View>
               )}
             </View>
             
-            <TouchableOpacity 
-              style={[
-                styles.submitButton,
-                { backgroundColor: currentColors.sendButtonBg },
-                (!question.trim() || loading) && styles.disabledButton
-              ]}
-              onPress={handleSubmit}
-              disabled={!question.trim() || loading}
-            >
-              {loading ? (
-                <ActivityIndicator color="#FFFFFF" size="small" />
-              ) : (
-                <View style={styles.submitButtonContent}>
-                  <Text style={styles.submitButtonText}>
-                    Get Answer
-                  </Text>
-                  <MaterialIcons name="send" size={20} color="#FFFFFF" style={styles.sendIcon} />
-                </View>
-              )}
-            </TouchableOpacity>
-          </View>
-          
-          {/* Answer Container */}
-          <View style={styles.answerSection}>
-            <Text style={[styles.sectionTitle, { 
-              color: currentColors.text
-            }]}>
-              AI Tutor Response
-            </Text>
-            
+            {/* Footer Banner */}
             <View style={[
-              styles.answerContainer,
-              { backgroundColor: currentColors.answerBackground }
+              styles.footerBanner, 
+              { backgroundColor: isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)' }
             ]}>
-              {answer ? (
-                <ScrollView style={styles.answerScrollView}>
-                  <Text style={[
-                    styles.answerText, 
-                    { color: currentColors.answerText }
-                  ]}>
-                    {answer}
-                  </Text>
-                </ScrollView>
-              ) : (
-                <View style={styles.emptyAnswer}>
-                  <Text style={[styles.emptyAnswerText, { 
-                    color: currentColors.subtitleText
-                  }]}>
-                    Ask a question and I'll help you understand math and science concepts!
-                  </Text>
-                </View>
-              )}
+              <Text style={[styles.footerText, { 
+                color: currentColors.subtitleText
+              }]}>
+                I'm specialized in math and science topics only
+              </Text>
             </View>
-          </View>
-          
-          {/* Footer Banner */}
-          <View style={[
-            styles.footerBanner, 
-            { backgroundColor: isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }
-          ]}>
-            <Text style={[styles.footerText, { 
-              color: currentColors.subtitleText
-            }]}>
-              I'm specialized in math and science topics only
-            </Text>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+  },
   container: {
     flex: 1,
   },
@@ -447,9 +487,12 @@ const styles = StyleSheet.create({
   },
   serverStatusContainer: {
     marginBottom: 15,
-    padding: 10,
     borderRadius: 10,
-    backgroundColor: 'rgba(0,0,0,0.03)',
+    overflow: 'hidden', // Important for BlurView to be properly contained
+    position: 'relative',
+  },
+  blurViewContent: {
+    padding: 10,
   },
   statusRow: {
     flexDirection: 'row',
@@ -486,6 +529,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 10,
     fontWeight: '600',
+    textShadowColor: 'rgba(0,0,0,0.2)',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 2,
   },
   inputContainer: {
     borderRadius: 15,
@@ -548,6 +594,7 @@ const styles = StyleSheet.create({
   answerContainer: {
     borderRadius: 15,
     minHeight: 200,
+    maxHeight: height * 0.4, // Make it responsive to screen height
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -556,7 +603,9 @@ const styles = StyleSheet.create({
   },
   answerScrollView: {
     padding: 15,
-    maxHeight: 300,
+  },
+  answerScrollContent: {
+    flexGrow: 1,
   },
   answerText: {
     fontSize: 16,
@@ -574,6 +623,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 20,
   },
+  scrollHintContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 8,
+    opacity: 0.7,
+  },
+  scrollHintText: {
+    fontSize: 12,
+    marginLeft: 4,
+  },
   footerBanner: {
     padding: 10,
     borderRadius: 10,
@@ -587,3 +647,21 @@ const styles = StyleSheet.create({
 });
 
 export default AI_TUTOR_APP;
+
+
+
+
+
+//before running it check your adb devices connection
+//adb devices
+//it will show something like these
+//* daemon not running; starting now at tcp:5037
+//* daemon started successfully
+//List of devices attached
+//RZ8NA2F91HR     device
+//after that put these cmd in your terminal
+//adb reverse tcp:8000 tcp:8000
+//8000
+
+//now your frontend will make the server connection to your device
+//and you can run your frontend
