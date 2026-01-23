@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+.env
+
+# Node
+node_modules/
+dist/
+build/
+.eslintcache
+
+# Databases & local stores
+*.db
+*.sqlite3
+postgres_data/
+
+# OS
+.DS_Store
+Thumbs.db
