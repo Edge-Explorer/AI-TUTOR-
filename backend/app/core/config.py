@@ -7,10 +7,10 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
 
     # Database
-    POSTGRES_USER: str
-    POSTGRES_PASSWORD: str
-    POSTGRES_DB: str
-    DATABASE_URL: Optional[str] = None
+    POSTGRES_USER: str = "postgres"
+    POSTGRES_PASSWORD: str = "Neel@1234"
+    POSTGRES_DB: str = "ai_tutor"
+    DATABASE_URL: Optional[str] = "postgresql://postgres:Neel@1234@localhost:5432/ai_tutor"
 
     # Security
     SECRET_KEY: str
