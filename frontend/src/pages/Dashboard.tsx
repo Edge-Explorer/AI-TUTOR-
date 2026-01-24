@@ -94,11 +94,18 @@ const Dashboard = () => {
                         <button
                             key={t.id}
                             onClick={() => setTopic(t.name)}
-                            className={topic === t.name ? 'active' : ''}
+                            className={`${topic === t.name ? 'active' : ''} group`}
                         >
-                            {t.icon}
+                            <span className="transition-all group-hover:scale-110 group-active:scale-95">
+                                {t.icon}
+                            </span>
                             <span className="flex-1 text-left text-sm">{t.name}</span>
-                            {topic === t.name && <ChevronRight size={14} />}
+                            {topic === t.name && (
+                                <ChevronRight
+                                    size={14}
+                                    className="transition-transform group-hover:translate-x-1"
+                                />
+                            )}
                         </button>
                     ))}
                 </nav>
@@ -113,9 +120,13 @@ const Dashboard = () => {
                             <p className="text-xs text-slate-500 truncate">{userData?.email || 'Premium Plan'}</p>
                         </div>
                     </div>
-                    <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-red-500 hover:bg-red-50 transition-all rounded-xl">
-                        <LogOut size={18} />
-                        <span className="text-sm font-semibold">Sign Out</span>
+                    <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-red-500 hover:bg-red-50 transition-all rounded-xl font-semibold group relative overflow-hidden"
+                    >
+                        <div className="absolute inset-0 bg-gradient-to-r from-red-500/0 via-red-500/5 to-red-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                        <LogOut size={18} className="transition-transform group-hover:rotate-12 group-hover:scale-110" />
+                        <span className="text-sm relative z-10">Sign Out</span>
                     </button>
                 </div>
             </aside>
@@ -123,14 +134,17 @@ const Dashboard = () => {
             {/* Main Content */}
             <main className="main-content">
                 <header className="h-16 border-b border-slate-100 flex items-center justify-between px-8 bg-white/50 backdrop-blur-md sticky top-0 z-10">
-                    <div className="flex items-center gap-2">
-                        <span className="text-slate-400 font-medium">Focus:</span>
-                        <span className="font-bold text-slate-800">{topic}</span>
+                    <div className="flex items-center gap-3">
+                        <span className="text-slate-400 font-medium text-sm">Focus:</span>
+                        <span className="font-bold text-slate-800 px-3 py-1 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg border border-indigo-100">{topic}</span>
                     </div>
                     <div className="flex items-center gap-4 text-xs font-semibold text-slate-400 uppercase tracking-widest">
-                        <div className="flex items-center gap-2 px-3 py-1 bg-slate-50 rounded-full border border-slate-100">
-                            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                            Ollama Running
+                        <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-full border border-slate-100 hover:border-emerald-200 transition-all group">
+                            <div className="relative">
+                                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                                <div className="absolute inset-0 w-2 h-2 bg-emerald-500 rounded-full animate-ping opacity-75"></div>
+                            </div>
+                            <span className="group-hover:text-emerald-600 transition-colors">Ollama Running</span>
                         </div>
                     </div>
                 </header>
@@ -177,9 +191,9 @@ const Dashboard = () => {
                         <button
                             type="submit"
                             disabled={!input.trim() || loading}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 btn-primary !w-auto !py-2 !px-4"
+                            className="absolute right-2 top-1/2 -translate-y-1/2 btn-primary !w-auto !py-2 !px-4 group"
                         >
-                            <Send size={18} />
+                            <Send size={18} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                             <span className="hidden sm:inline">Ask AI</span>
                         </button>
                     </form>

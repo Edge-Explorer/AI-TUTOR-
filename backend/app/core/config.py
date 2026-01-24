@@ -19,7 +19,13 @@ class Settings(BaseSettings):
 
     # Ollama
     OLLAMA_MODEL: str = "phi3"
-    OLLAMA_HOST: str = "http://localhost:11434"
+    OLLAMA_HOST: str = "http://127.0.0.1:11434"
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # Ensure OLLAMA_HOST has protocol
+        if self.OLLAMA_HOST and not self.OLLAMA_HOST.startswith(('http://', 'https://')):
+            self.OLLAMA_HOST = f"http://{self.OLLAMA_HOST}"
 
     class Config:
         env_file = ".env"
