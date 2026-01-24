@@ -6,20 +6,21 @@ class OllamaService:
         self.base_url = settings.OLLAMA_HOST
         self.model = settings.OLLAMA_MODEL
 
-    async def generate_response(self, prompt: str) -> str:
-        async with httpx.AsyncClient(timeout=60.0) as client:
+    async def generate_response(self, prompt: str, focus_area: str = "General") -> str:
+        async with httpx.AsyncClient(timeout=90.0) as client:
             try:
                 # Constructing the system prompt for AI Tutor
                 system_prompt = (
-                    "You are an expert AI tutor specialzing in Math and Science. "
-                    "Your goal is to help students understand concepts by explaining them clearly. "
-                    "Use examples and encourage critical thinking. "
-                    "If a question is not about math or science, politely redirect them."
+                    f"You are a professional Academic AI Tutor specializing in {focus_area}. "
+                    "Your mission is to provide clear, structured, and insightful educational support. "
+                    "Break down complex topics into digestible parts, use professional language, "
+                    "and provide real-world examples where appropriate. "
+                    f"Always maintain a supportive and scholarly tone appropriate for {focus_area} studies."
                 )
                 
                 payload = {
                     "model": self.model,
-                    "prompt": f"{system_prompt}\n\nStudent: {prompt}\n\nTutor:",
+                    "prompt": f"System: {system_prompt}\n\nStudent: {prompt}\n\nResponse:",
                     "stream": False
                 }
                 

@@ -30,6 +30,10 @@ class ChatCreate(BaseModel):
     message: str
     topic: Optional[str] = "general"
 
+class ChatAsk(BaseModel):
+    prompt: str
+    focus_area: Optional[str] = "General"
+
 class ChatResponse(BaseModel):
     message: str
     response: str

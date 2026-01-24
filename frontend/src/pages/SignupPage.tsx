@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { UserPlus, Sparkles, Mail, User, Lock, Loader2, Eye, EyeOff } from 'lucide-react';
+import { UserPlus, BookOpen, Mail, User, Lock, Loader2, Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
@@ -19,21 +19,10 @@ const SignupPage = () => {
         setLoading(true);
 
         try {
-            console.log("🚀 Attempting signup...");
-            const response = await api.post('/auth/signup', {
-                email,
-                username,
-                password
-            });
-            console.log("✅ Signup successful");
+            await api.post('/auth/signup', { email, username, password });
             navigate('/');
         } catch (err: any) {
-            console.error("❌ Signup error details:", err);
-            if (!err.response) {
-                setError(`Network Error. Double check if Backend is running at 127.0.0.1:8000`);
-            } else {
-                setError(err.response?.data?.detail || 'Signup failed.');
-            }
+            setError(err.response?.data?.detail || 'Signup failed. Please check your details.');
         } finally {
             setLoading(false);
         }
@@ -42,31 +31,27 @@ const SignupPage = () => {
     return (
         <div className="center-screen">
             <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="glass-panel beast-card"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="auth-card"
             >
-                <div className="text-center mb-6">
-                    <motion.div
-                        animate={{ rotate: [0, 10, -10, 0] }}
-                        transition={{ repeat: Infinity, duration: 4 }}
-                        className="inline-block p-4 bg-primary/20 rounded-2xl mb-4"
-                    >
-                        <Sparkles className="text-primary" size={32} />
-                    </motion.div>
-                    <h1 className="text-3xl font-black mb-1 gradient-text uppercase tracking-tight">Beast Mode</h1>
-                    <p className="text-text-muted text-sm uppercase tracking-widest font-bold">New Recruit</p>
+                <div className="text-center mb-8">
+                    <div className="inline-flex p-3 bg-indigo-50 rounded-2xl mb-4 text-primary">
+                        <BookOpen size={32} />
+                    </div>
+                    <h1 className="text-2xl font-bold text-slate-800">Create Account</h1>
+                    <p className="text-slate-500 text-sm mt-1">Start your personalized learning experience today</p>
                 </div>
 
                 <form onSubmit={handleSignup} className="space-y-4">
-                    <div>
-                        <label className="label-text">Email</label>
+                    <div className="form-group">
+                        <label className="label-text">Email Address</label>
                         <div className="relative">
-                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" size={18} />
+                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                             <input
                                 type="email"
-                                className="beast-input pl-12"
-                                placeholder="karan@beast.com"
+                                className="input-field pl-12"
+                                placeholder="student@university.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
@@ -74,14 +59,14 @@ const SignupPage = () => {
                         </div>
                     </div>
 
-                    <div>
+                    <div className="form-group">
                         <label className="label-text">Username</label>
                         <div className="relative">
-                            <User className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" size={18} />
+                            <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                             <input
                                 type="text"
-                                className="beast-input pl-12"
-                                placeholder="karan_the_beast"
+                                className="input-field pl-12"
+                                placeholder="choose_a_username"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 required
@@ -89,13 +74,13 @@ const SignupPage = () => {
                         </div>
                     </div>
 
-                    <div>
+                    <div className="form-group">
                         <label className="label-text">Password</label>
                         <div className="relative">
-                            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" size={18} />
+                            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                             <input
                                 type={showPassword ? "text" : "password"}
-                                className="beast-input pl-12 pr-12"
+                                className="input-field pl-12 pr-12"
                                 placeholder="••••••••"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
@@ -104,7 +89,7 @@ const SignupPage = () => {
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted hover:text-primary transition-colors"
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary"
                             >
                                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                             </button>
@@ -112,33 +97,21 @@ const SignupPage = () => {
                     </div>
 
                     {error && (
-                        <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            className="error-text"
-                        >
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="error-box text-center">
                             {error}
                         </motion.div>
                     )}
 
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="beast-btn beast-btn-primary w-full mt-2"
-                    >
-                        {loading ? <Loader2 className="animate-spin" /> : <span>Create Account</span>}
-                        <span className="shimmer"></span>
+                    <button type="submit" disabled={loading} className="btn-primary mt-4">
+                        {loading ? <Loader2 className="animate-spin" size={20} /> : <><UserPlus size={20} /> Register Now</>}
                     </button>
                 </form>
 
-                <div className="mt-6 pt-4 border-t border-glass-border text-center">
-                    <p className="text-text-muted text-xs font-bold uppercase tracking-wider">
-                        Already a member?
-                        <button
-                            onClick={() => navigate('/')}
-                            className="text-primary ml-2 hover:text-secondary transition-colors"
-                        >
-                            Sign In
+                <div className="mt-8 pt-6 border-t border-slate-100 text-center">
+                    <p className="text-slate-500 text-sm">
+                        Already have an account?
+                        <button onClick={() => navigate('/')} className="text-primary font-bold ml-2 hover:underline">
+                            Login here
                         </button>
                     </p>
                 </div>
