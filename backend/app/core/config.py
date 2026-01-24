@@ -23,6 +23,11 @@ class Settings(BaseSettings):
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        # Construct DATABASE_URL if not provided
+        if not self.DATABASE_URL:
+            # Construct from components
+            self.DATABASE_URL = f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@localhost:5432/{self.POSTGRES_DB}"
+            
         # Ensure OLLAMA_HOST has protocol
         if self.OLLAMA_HOST and not self.OLLAMA_HOST.startswith(('http://', 'https://')):
             self.OLLAMA_HOST = f"http://{self.OLLAMA_HOST}"
