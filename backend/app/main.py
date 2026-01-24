@@ -24,11 +24,17 @@ async def log_requests(request: Request, call_next):
     print(f"✅ RESPONSE: {request.method} {request.url.path} - {response.status_code} ({process_time:.2f}ms)")
     return response
 
-# Set CORS - MAXIMUM PERMISSIVE FOR DEBUGGING
+# Set CORS - Standard configuration for Proxy/Direct use
+origins = [
+    "http://127.0.0.1:5173",
+    "http://localhost:5173",
+    "http://127.0.0.1:8000", # Accessing backend directly
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False, # Credentials cannot be used with "*"
+    allow_origins=origins,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
