@@ -150,6 +150,90 @@ body {
     box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
 }
 
+/* Input with Icon */
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--text-tertiary);
+    pointer-events: none;
+    transition: color 0.2s;
+}
+
+.input-with-icon:focus-within .input-icon {
+    color: var(--primary);
+}
+
+/* Icon Button (for password toggle, etc.) */
+.icon-button {
+    position: absolute;
+    right: 0.75rem;
+    background: transparent;
+    border: none;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-button:hover {
+    background: var(--bg-tertiary);
+    color: var(--primary);
+    transform: scale(1.05);
+}
+
+.icon-button:active {
+    transform: scale(0.95);
+}
+
+/* Icon Container */
+.icon-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(79, 70, 229, 0.15) 100%);
+    border-radius: var(--radius-lg);
+    color: var(--primary);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+}
+
+/* Auth Footer */
+.auth-footer {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-light);
+    text-align: center;
+}
+
+/* Link Button */
+.link-button {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.link-button:hover {
+    background: rgba(99, 102, 241, 0.1);
+    text-decoration: underline;
+}
+
 /* Buttons */
 .btn-primary {
     width: 100%;
@@ -243,13 +327,32 @@ body {
     font-weight: 500;
     color: var(--text-secondary);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     text-align: left;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar button::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background: var(--primary);
+    transform: scaleY(0);
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sidebar button:hover {
     background: var(--bg-secondary);
     color: var(--text-primary);
+    transform: translateX(2px);
+}
+
+.sidebar button:hover::before {
+    transform: scaleY(1);
 }
 
 .sidebar button.active {
@@ -257,6 +360,22 @@ body {
     color: var(--primary);
     font-weight: 600;
     box-shadow: inset 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.sidebar button.active::before {
+    transform: scaleY(1);
+}
+
+.sidebar button svg {
+    transition: transform 0.2s;
+}
+
+.sidebar button:hover svg {
+    transform: scale(1.1);
+}
+
+.sidebar button.active svg {
+    transform: scale(1.1);
 }
 
 /* Main Content */

@@ -94,12 +94,9 @@ const Dashboard = () => {
                         <button
                             key={t.id}
                             onClick={() => setTopic(t.name)}
-                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${topic === t.name
-                                    ? 'bg-indigo-50 text-primary font-semibold border border-indigo-100'
-                                    : 'text-slate-600 hover:bg-slate-50'
-                                }`}
+                            className={topic === t.name ? 'active' : ''}
                         >
-                            <span className={topic === t.name ? 'text-primary' : 'text-slate-400'}>{t.icon}</span>
+                            {t.icon}
                             <span className="flex-1 text-left text-sm">{t.name}</span>
                             {topic === t.name && <ChevronRight size={14} />}
                         </button>

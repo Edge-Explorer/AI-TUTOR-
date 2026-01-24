@@ -43,7 +43,7 @@ const LoginPage = () => {
                 className="auth-card"
             >
                 <div className="text-center mb-8">
-                    <div className="inline-flex p-3 bg-indigo-50 rounded-2xl mb-4 text-primary">
+                    <div className="icon-container mb-4">
                         <BookOpen size={32} />
                     </div>
                     <h1 className="text-2xl font-bold text-slate-800">Welcome Back</h1>
@@ -53,8 +53,8 @@ const LoginPage = () => {
                 <form onSubmit={handleLogin} className="space-y-5">
                     <div className="form-group">
                         <label className="label-text">Username</label>
-                        <div className="relative">
-                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                        <div className="input-with-icon">
+                            <Mail className="input-icon" size={18} />
                             <input
                                 type="text"
                                 className="input-field pl-12"
@@ -68,8 +68,8 @@ const LoginPage = () => {
 
                     <div className="form-group">
                         <label className="label-text">Password</label>
-                        <div className="relative">
-                            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                        <div className="input-with-icon">
+                            <Lock className="input-icon" size={18} />
                             <input
                                 type={showPassword ? "text" : "password"}
                                 className="input-field pl-12 pr-12"
@@ -81,7 +81,7 @@ const LoginPage = () => {
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary"
+                                className="icon-button"
                             >
                                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                             </button>
@@ -99,10 +99,10 @@ const LoginPage = () => {
                     </button>
                 </form>
 
-                <div className="mt-8 pt-6 border-t border-slate-100 text-center">
+                <div className="auth-footer">
                     <p className="text-slate-500 text-sm">
                         New student?
-                        <button onClick={() => navigate('/signup')} className="text-primary font-bold ml-2 hover:underline">
+                        <button onClick={() => navigate('/signup')} className="link-button">
                             Create an account
                         </button>
                     </p>
