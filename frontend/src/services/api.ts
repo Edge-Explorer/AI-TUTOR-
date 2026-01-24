@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-    // Use localhost to match browser console domain
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1',
+    // Use 127.0.0.1 to match the actual Uvicorn listener
+    baseURL: import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api/v1',
     headers: {
         'Content-Type': 'application/json',
     }

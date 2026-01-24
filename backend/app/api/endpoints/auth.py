@@ -12,6 +12,7 @@ router = APIRouter()
 
 @router.post("/signup", response_model=UserResponse)
 def signup(user_in: UserCreate, db: Session = Depends(get_db)):
+    print(f"DEBUG: Signup request received for {user_in.email}")
     # Check if user already exists
     user = db.query(User).filter(User.email == user_in.email).first()
     if user:
@@ -40,6 +41,7 @@ def signup(user_in: UserCreate, db: Session = Depends(get_db)):
 
 @router.post("/login", response_model=Token)
 def login(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()):
+    print(f"DEBUG: Login request for user: {form_data.username}")
     user = db.query(User).filter(User.username == form_data.username).first()
     if not user or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(

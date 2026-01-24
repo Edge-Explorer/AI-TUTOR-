@@ -17,21 +17,18 @@ app = FastAPI(
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
+    print(f"🔵 INCOMING: {request.method} {request.url.path} from {request.client}")
     start_time = time.time()
     response = await call_next(request)
     process_time = (time.time() - start_time) * 1000
-    print(f"DEBUG: {request.method} {request.url.path} - {response.status_code} ({process_time:.2f}ms)")
+    print(f"✅ RESPONSE: {request.method} {request.url.path} - {response.status_code} ({process_time:.2f}ms)")
     return response
 
-# Set CORS
+# Set CORS - MAXIMUM PERMISSIVE FOR DEBUGGING
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:3000",
-    ],
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False, # Credentials cannot be used with "*"
     allow_methods=["*"],
     allow_headers=["*"],
 )

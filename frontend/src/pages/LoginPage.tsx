@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { LogIn, Sparkles, User, Lock, Loader2 } from 'lucide-react';
+import { LogIn, Sparkles, User, Lock, Loader2, Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -17,7 +18,7 @@ const LoginPage = () => {
         setLoading(true);
 
         try {
-            console.log("🚀 Attempting login for:", username);
+            console.log("🚀 Attempting login...");
             const formData = new FormData();
             formData.append('username', username);
             formData.append('password', password);
@@ -31,7 +32,11 @@ const LoginPage = () => {
             navigate('/dashboard');
         } catch (err: any) {
             console.error("❌ Login error:", err);
-            setError(err.response?.data?.detail || 'Invalid credentials or server offline.');
+            if (!err.response) {
+                setError(`Network Error. Double check if Backend is running at 127.0.0.1:8000`);
+            } else {
+                setError(err.response?.data?.detail || 'Invalid credentials.');
+            }
         } finally {
             setLoading(false);
         }
@@ -44,19 +49,19 @@ const LoginPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="glass-panel beast-card"
             >
-                <div className="text-center mb-10">
+                <div className="text-center mb-8">
                     <motion.div
                         animate={{ scale: [1, 1.1, 1] }}
                         transition={{ repeat: Infinity, duration: 3 }}
                         className="inline-block p-4 bg-primary/20 rounded-2xl mb-4"
                     >
-                        <Sparkles className="text-primary" size={40} />
+                        <Sparkles className="text-primary" size={32} />
                     </motion.div>
-                    <h1 className="text-4xl font-black mb-2 gradient-text">AI TUTOR 2.0</h1>
-                    <p className="text-text-muted font-medium">Welcome Back, Beast!</p>
+                    <h1 className="text-3xl font-black mb-1 gradient-text uppercase tracking-tight">AI TUTOR 2.0</h1>
+                    <p className="text-text-muted text-sm uppercase tracking-widest font-bold">Unleash the Beast</p>
                 </div>
 
-                <form onSubmit={handleLogin} className="space-y-6">
+                <form onSubmit={handleLogin} className="space-y-5">
                     <div>
                         <label className="label-text">Username</label>
                         <div className="relative">
@@ -77,13 +82,20 @@ const LoginPage = () => {
                         <div className="relative">
                             <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" size={18} />
                             <input
-                                type="password"
-                                className="beast-input pl-12"
+                                type={showPassword ? "text" : "password"}
+                                className="beast-input pl-12 pr-12"
                                 placeholder="••••••••"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                             />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted hover:text-primary transition-colors"
+                            >
+                                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                            </button>
                         </div>
                     </div>
 
@@ -100,28 +112,21 @@ const LoginPage = () => {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="beast-btn beast-btn-primary w-full"
+                        className="beast-btn beast-btn-primary w-full shadow-2xl"
                     >
-                        {loading ? (
-                            <Loader2 className="animate-spin" size={24} />
-                        ) : (
-                            <>
-                                <LogIn size={22} />
-                                Unleash Beast Mode
-                                <span className="shimmer"></span>
-                            </>
-                        )}
+                        {loading ? <Loader2 className="animate-spin" /> : <span>Login to Beast Mode</span>}
+                        <span className="shimmer"></span>
                     </button>
                 </form>
 
                 <div className="mt-8 pt-6 border-t border-glass-border text-center">
-                    <p className="text-text-muted text-sm font-medium">
+                    <p className="text-text-muted text-xs font-bold uppercase tracking-wider">
                         New to AI Tutor?
                         <button
                             onClick={() => navigate('/signup')}
-                            className="text-primary ml-2 hover:text-secondary transition-colors font-bold"
+                            className="text-primary ml-2 hover:text-secondary transition-colors"
                         >
-                            Sign Up
+                            Join the Pack
                         </button>
                     </p>
                 </div>
