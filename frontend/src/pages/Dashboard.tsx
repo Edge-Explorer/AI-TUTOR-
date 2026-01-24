@@ -191,14 +191,14 @@ const Dashboard = () => {
                         <button
                             type="submit"
                             disabled={!input.trim() || loading}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 btn-primary !w-auto !py-2 !px-4 group"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 btn-primary !w-auto !py-2 !px-4 group"
                         >
                             <Send size={18} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                            <span className="hidden sm:inline">Ask AI</span>
+                            <span className="hidden sm:inline ml-1">Ask AI</span>
                         </button>
                     </form>
                     <p className="text-center text-[10px] text-slate-400 mt-4 uppercase tracking-widest font-bold">
-                        Interactive Learning Sessions Powered by Neural Networks
+                        Interactive Learning Sessions Powered by Ollama
                     </p>
                 </div>
             </main>

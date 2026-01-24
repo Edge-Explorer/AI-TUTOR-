@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { LogIn, BookOpen, Mail, Lock, Loader2, Eye, EyeOff } from 'lucide-react';
+import { LogIn, BookOpen, User, Lock, Loader2, Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
@@ -54,7 +54,7 @@ const LoginPage = () => {
                     <div className="form-group">
                         <label className="label-text">Username</label>
                         <div className="input-with-icon">
-                            <Mail className="input-icon" size={18} />
+                            <User className="input-icon" size={18} />
                             <input
                                 type="text"
                                 className="input-field pl-12"

@@ -137,6 +137,9 @@ body {
     color: var(--text-primary);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     font-family: inherit;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
 }
 
 .input-field::placeholder {
@@ -160,10 +163,16 @@ body {
 
 .input-icon {
     position: absolute;
-    left: 1rem;
+    left: 1.125rem;
+    top: 50%;
+    transform: translateY(-50%);
     color: var(--text-tertiary);
     pointer-events: none;
-    transition: color 0.2s;
+    transition: color 0.3s ease;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .input-with-icon:focus-within .input-icon {
@@ -174,6 +183,8 @@ body {
 .icon-button {
     position: absolute;
     right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
     background: transparent;
     border: none;
     color: var(--text-tertiary);
@@ -184,8 +195,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
-    overflow: hidden;
+    z-index: 2;
 }
 
 .icon-button::before {
@@ -590,7 +600,7 @@ body {
 
 /* Input Area */
 .input-area {
-    padding: 1.5rem 2rem;
+    padding: 1rem 2rem 1.25rem;
     background: var(--bg-primary);
     border-top: 1px solid var(--border-color);
     box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
@@ -603,17 +613,20 @@ body {
 }
 
 .chat-input-wrapper .input-field {
-    padding-right: 140px;
+    padding-right: 120px;
+    height: 3.5rem;
 }
 
 .chat-input-wrapper button {
     position: absolute;
-    right: 6px;
+    right: 0.75rem;
     top: 50%;
     transform: translateY(-50%);
     width: auto;
-    padding: 0.625rem 1.25rem;
+    padding: 0.5rem 1rem;
+    height: calc(100% - 1.5rem);
     border-radius: var(--radius-sm);
+    z-index: 10;
 }
 
 /* Error Box */
