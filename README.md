@@ -61,4 +61,4 @@ AI-TUTOR/
 
 ---
 
-Built with 🔥 by Antigravity AI.
+Built with 🔥 by Karan.
