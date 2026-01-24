@@ -1,3 +1,4 @@
+import os
 from pydantic_settings import BaseSettings
 from typing import Optional
 
@@ -25,8 +26,11 @@ class Settings(BaseSettings):
         super().__init__(**kwargs)
         # Construct DATABASE_URL if not provided
         if not self.DATABASE_URL:
-            # Construct from components
-            self.DATABASE_URL = f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@localhost:5432/{self.POSTGRES_DB}"
+            # Detect if running in Docker
+            host = "db" if os.path.exists("/.dockerenv") else "127.0.0.1"
+            # Encode password if it contains special characters
+            password = self.POSTGRES_PASSWORD.replace("@", "%40")
+            self.DATABASE_URL = f"postgresql://{self.POSTGRES_USER}:{password}@{host}:5432/{self.POSTGRES_DB}"
             
         # Ensure OLLAMA_HOST has protocol
         if self.OLLAMA_HOST and not self.OLLAMA_HOST.startswith(('http://', 'https://')):
