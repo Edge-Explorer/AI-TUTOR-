@@ -1,47 +1,64 @@
-# AI Tutor 📘🤖
+# AI Tutor 2.0 | Beast Mode 🚀📘🤖
 
-**AI Tutor** is an interactive, AI-powered educational assistant designed to help users learn and understand concepts in math and science. Built using React Native and Flask, the app leverages GPT4All and ChromaDB for powerful, context-aware tutoring.
-
----
-
-## ⚙️ Features
-
-* **Interactive Learning**: Engage with AI to explore math and science topics.
-* **Contextual Assistance**: Utilizes ChromaDB for storing and retrieving relevant information.
-* **Mobile Accessibility**: Developed with React Native for cross-platform mobile support.
-* **Backend Support**: Flask-based server to handle requests and manage data.
+A professional, containerized AI-powered educational assistant built with **FastAPI**, **React (TS)**, **PostgreSQL**, and **Ollama**.
 
 ---
 
-## 🧠 Tech Stack
+## 🏗️ Architecture
 
-* **Frontend**: React Native
-* **Backend**: Flask
-* **AI Model**: GPT4All
-* **Database**: ChromaDB([GitHub][1])
-
----
-
-## 📁 Modules
-
-* `App.tsx`: Main React Native application entry point.
-* `app.py`: Flask backend server script.
-* `chromadb_store`: Module for interacting with ChromaDB.
-* `math_data.json`: Sample math-related data for tutoring.
-* `science_data.json`: Sample science-related data for tutoring.
+- **Frontend**: Vite + React + TypeScript + Framer Motion (Premium UI/UX)
+- **Backend**: FastAPI + SQLAlchemy + JWT Authentication
+- **Database**: PostgreSQL (pgAdmin4 included)
+- **Migrations**: Alembic
+- **AI Engine**: Ollama (Running locally)
+- **Containerization**: Docker & Docker Compose
 
 ---
 
-## 🧪 Input
+## 🚀 Quick Start
 
-* **User Queries**: Natural language questions related to math and science topics.
-* **Data Files**: JSON files containing structured data for tutoring.
+### 1. Prerequisites
+- **Docker Desktop** installed and running.
+- **Ollama** installed and running on your host machine.
+- Pull the models:
+  ```bash
+  ollama pull phi3
+  ollama pull gemma:2b
+  ```
+
+### 2. Configuration
+Create a `.env` file in the root directory (based on `.env.example`):
+```bash
+cp .env.example .env
+```
+Update your `POSTGRES_PASSWORD` (e.g., `Neel@1234`).
+
+### 3. Run with Docker
+```bash
+docker-compose up --build
+```
 
 ---
 
-## 🚀 Goal
+## 📁 Project Structure
 
-To provide an accessible and interactive platform for students to enhance their understanding of math and science concepts through AI-driven tutoring.
+```text
+AI-TUTOR/
+├── backend/            # FastAPI, sqlalchemy, alembic
+├── frontend/           # Vite, React, Framer Motion
+├── docker-compose.yml  # Orchestration
+└── legacy_v1/          # Original project backup
+```
 
+---
 
+## 🛠️ Tech Stack Details
 
+- **Auth**: Secure JWT-based authentication with password hashing (bcrypt).
+- **Service Layer**: Decoupled AI service for modular LLM integration.
+- **Styling**: Custom CSS with Glassmorphism and Outfit typography.
+- **Network**: Wired with Docker `extra_hosts` to communicate with local Ollama.
+
+---
+
+Built with 🔥 by Antigravity AI.
