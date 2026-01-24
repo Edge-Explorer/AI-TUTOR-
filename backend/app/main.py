@@ -1,10 +1,12 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+import time
+
+# Create tables
+from app.db.session import engine, Base
 from app.api.endpoints import auth, chat
 from app.core.config import settings
-from app.db.session import engine, Base
 
-# Create tables (In a production app, we would use Alembic migrations)
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -12,6 +14,14 @@ app = FastAPI(
     version=settings.VERSION,
     openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    process_time = (time.time() - start_time) * 1000
+    print(f"DEBUG: {request.method} {request.url.path} - {response.status_code} ({process_time:.2f}ms)")
+    return response
 
 # Set CORS
 app.add_middleware(
